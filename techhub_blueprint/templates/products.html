@@ -48,18 +48,28 @@
         {% for product in products %}
         <div class="product-card">
             <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}">
-                <img src="{{ url_for('techhub.static', filename='uploads/products/' + product[5]) }}" alt="{{ product[1] }}">
+                <img src="{{ url_for('techhub.static', filename='uploads/products/' + (product[5] if product[5] and '.' in product[5]|string else 'default.jpg')) }}"
+                     alt="{{ product[1] }}"
+                     onerror="this.src='{{ url_for('techhub.static', filename='uploads/products/default.jpg') }}'">
             </a>
             <h3>
                 <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}" style="text-decoration: none;">
                     {{ product[1] }}
                 </a>
             </h3>
-            <div class="price">${{ "%.2f"|format(product[3]) }}</div>
-            {% if product[6] > 0 %}
+            <div class="price">
+                {% if product[3] is number %}
+                    ${{ "%.2f"|format(product[3]) }}
+                {% else %}
+                    {{ product[3] }}
+                {% endif %}
+            </div>
+            {% if product[6] is number and product[6] > 0 %}
                 <div class="stock">✓ In Stock ({{ product[6] }} available)</div>
-            {% else %}
+            {% elif product[6] is number %}
                 <div class="stock out-of-stock">✗ Out of Stock</div>
+            {% else %}
+                <div class="stock">{{ product[6] }}</div>
             {% endif %}
             <form action="{{ url_for('techhub.add_to_cart', product_id=product[0]) }}" method="POST" style="border: none; background: none; padding: 0; margin-top: 8px;">
                 <input type="hidden" name="quantity" value="1">
