@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>💳 Checkout</h1>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+    <!-- Order Summary -->
+    <div>
+        <h2>Order Summary</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_id, item in cart.items() %}
+                <tr>
+                    <td><b>{{ item.name }}</b></td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.price) }}</td>
+                    <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-total">
+            <h2 style="display: inline; margin-right: 20px;">Total:</h2>
+            <span style="font-size: 18px; color: #CC0000;">${{ "%.2f"|format(total) }}</span>
+        </div>
+    </div>
+
+    <!-- Payment & Shipping Info -->
+    <div>
+        <div style="background-color: #FFF8DC; border: 2px solid #FF6600; padding: 15px;">
+            <h3>Payment Information</h3>
+
+            {% if customer[9] %}
+                <p style="background-color: #DFD; padding: 8px; border: 1px solid #090; margin: 10px 0;">
+                    ✓ Using saved payment method
+                </p>
+                <p><b>Card:</b> {{ customer[9] }}</p>
+                <p><b>Exp:</b> {{ customer[11] }}</p>
+            {% else %}
+                <p style="background-color: #FFE; padding: 8px; border: 1px solid #CC0000; margin: 10px 0;">
+                    ⚠️ No saved payment method
+                </p>
+                <p style="font-size: 10px;">
+                    You can add payment information in your <a href="{{ url_for('techhub.account') }}">account settings</a>.
+                </p>
+            {% endif %}
+
+            <hr>
+
+            <h3>Shipping Address</h3>
+            {% if customer[5] %}
+                <p>{{ customer[4] }}</p>
+                <p>{{ customer[5] }}</p>
+                <p>{{ customer[6] }}, {{ customer[7] }} {{ customer[8] }}</p>
+            {% else %}
+                <p style="background-color: #FFE; padding: 8px; border: 1px solid #CC0000;">
+                    ⚠️ No shipping address on file
+                </p>
+            {% endif %}
+
+            <hr>
+
+            <form method="POST" action="{{ url_for('techhub.checkout') }}">
+                <button type="submit" style="width: 100%; padding: 12px; font-size: 12px;">
+                    🛒 Place Order
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 10px;">
+                <a href="{{ url_for('techhub.cart') }}" style="font-size: 10px;">
+                    ← Back to Cart
+                </a>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px; padding: 10px; background-color: #E8F4FF; border: 1px solid #0066CC; font-size: 10px;">
+            <p><b>✓ Secure Checkout</b></p>
+            <p>Your information is safe with us!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

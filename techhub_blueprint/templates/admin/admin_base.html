@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TechHub Electronics - Admin Panel{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('techhub.static', filename='css/style.css') }}">
+    <script src="{{ url_for('techhub.static', filename='js/cart.js') }}"></script>
+</head>
+<body>
+    <div id="container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <h1>⚙️ TechHub Electronics - Admin Panel ⚙️</h1>
+            <div class="tagline">Administrative Control Center</div>
+        </div>
+
+        {% if session.get('admin_id') %}
+        <!-- Admin Navigation -->
+        <div class="admin-nav">
+            <a href="{{ url_for('techhub.admin_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('techhub.admin_products') }}">Manage Products</a>
+            <a href="{{ url_for('techhub.admin_customers') }}">Manage Customers</a>
+            <a href="{{ url_for('techhub.index') }}">View Store</a>
+            <a href="{{ url_for('techhub.admin_logout') }}" style="float: right;">Logout ({{ session.get('admin_username') }})</a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" style="padding: 0 20px;">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main Content -->
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% else %}
+        <!-- Admin Login Form -->
+        <div id="content">
+            <h1>🔐 Admin Login</h1>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div style="max-width: 400px; margin: 20px auto;">
+                <form method="POST" action="{{ url_for('techhub.admin_login') }}">
+                    <fieldset style="border-color: #990000;">
+                        <legend style="color: #990000;">Administrative Access</legend>
+
+                        <label for="username">Admin Username <span class="required">*</span></label>
+                        <input type="text" name="username" id="username" required autofocus>
+
+                        <label for="password">Admin Password <span class="required">*</span></label>
+                        <input type="password" name="password" id="password" required>
+
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button type="submit" style="padding: 10px 30px; font-size: 12px; background: linear-gradient(to bottom, #CC0000, #990000); border-color: #990000;">
+                                🔓 Admin Login
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <div style="margin-top: 15px; padding: 10px; background-color: #FFE; border: 1px dashed #999; text-align: center; font-size: 10px;">
+                    <p>⚠️ Authorized Personnel Only</p>
+                    <p><a href="{{ url_for('techhub.index') }}">← Return to Store</a></p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <div id="footer" style="background-color: #660000; border-top-color: #CC0000;">
+            <div class="copyright">
+                &copy; 1998-2005 TechHub Electronics - Admin Panel
+            </div>
+            <div style="margin-top: 10px; font-size: 9px; color: #999;">
+                ⚠️ EDUCATIONAL CYBERSECURITY LAB - INTENTIONALLY VULNERABLE ⚠️
+            </div>
+        </div>
+    </div>
+</body>
+</html>

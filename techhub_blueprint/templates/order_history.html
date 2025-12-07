@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Order History - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>📦 Your Order History</h1>
+
+{% if orders %}
+    <table>
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td><b>#{{ order[0] }}</b></td>
+                <td>{{ order[4] }}</td>
+                <td>${{ "%.2f"|format(order[2]) }}</td>
+                <td>
+                    <span style="color: #FF6600; font-weight: bold;">{{ order[3]|upper }}</span>
+                </td>
+                <td>
+                    <a href="{{ url_for('techhub.order_confirmation', order_id=order[0]) }}" class="button" style="text-decoration: none; padding: 4px 8px; font-size: 10px;">
+                        View Details
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div style="text-align: center; padding: 40px; background-color: #FFE; border: 2px solid #999;">
+        <h2>No Orders Yet</h2>
+        <p style="margin: 15px 0;">You haven't placed any orders yet. Start shopping now!</p>
+        <a href="{{ url_for('techhub.products') }}" class="button" style="text-decoration: none;">
+            Browse Products
+        </a>
+    </div>
+{% endif %}
+
+<hr>
+
+<div style="text-align: center; padding: 15px; background-color: #E8F4FF; border: 2px solid #0066CC;">
+    <a href="{{ url_for('techhub.account') }}" class="button button-secondary" style="text-decoration: none; margin: 5px;">
+        ← Back to Account
+    </a>
+    <a href="{{ url_for('techhub.products') }}" class="button" style="text-decoration: none; margin: 5px;">
+        🛍️ Continue Shopping
+    </a>
+</div>
+{% endblock %}

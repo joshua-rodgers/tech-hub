@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>🛒 Your Shopping Cart</h1>
+
+{% if cart %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_id, item in cart.items() %}
+            <tr>
+                <td>
+                    <img src="{{ url_for('techhub.static', filename='uploads/products/' + item.image_url) }}"
+                         alt="{{ item.name }}"
+                         style="max-width: 60px; max-height: 60px; vertical-align: middle; margin-right: 10px;">
+                    <b>{{ item.name }}</b>
+                </td>
+                <td>${{ "%.2f"|format(item.price) }}</td>
+                <td>
+                    <form id="update-form-{{ product_id }}" action="{{ url_for('techhub.update_cart', product_id=product_id) }}" method="POST" style="display: inline; border: none; background: none; padding: 0;">
+                        <input type="number"
+                               name="quantity"
+                               id="qty-{{ product_id }}"
+                               value="{{ item.quantity }}"
+                               min="0"
+                               style="width: 60px;"
+                               onchange="updateQuantity('{{ product_id }}')">
+                    </form>
+                </td>
+                <td><b>${{ "%.2f"|format(item.price * item.quantity) }}</b></td>
+                <td>
+                    <a href="{{ url_for('techhub.remove_from_cart', product_id=product_id) }}"
+                       onclick="return confirmRemove('{{ item.name }}')"
+                       style="color: #CC0000; font-weight: bold;">
+                        ✗ Remove
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-total">
+        <h2 style="display: inline; margin-right: 20px;">Total:</h2>
+        <span style="font-size: 18px; color: #CC0000;">${{ "%.2f"|format(total) }}</span>
+    </div>
+
+    <div style="text-align: right; margin-top: 15px;">
+        <a href="{{ url_for('techhub.products') }}" class="button button-secondary" style="text-decoration: none;">
+            ← Continue Shopping
+        </a>
+        {% if session.get('customer_id') %}
+            <a href="{{ url_for('techhub.checkout') }}" class="button" style="text-decoration: none; margin-left: 10px; font-size: 12px;">
+                Proceed to Checkout →
+            </a>
+        {% else %}
+            <a href="{{ url_for('techhub.login') }}" class="button" style="text-decoration: none; margin-left: 10px; font-size: 12px;">
+                Login to Checkout →
+            </a>
+        {% endif %}
+    </div>
+
+{% else %}
+    <div style="text-align: center; padding: 40px; background-color: #FFE; border: 2px solid #999;">
+        <h2>Your cart is empty!</h2>
+        <p style="margin: 15px 0;">Start shopping to add items to your cart.</p>
+        <a href="{{ url_for('techhub.products') }}" class="button" style="text-decoration: none;">
+            Browse Products
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

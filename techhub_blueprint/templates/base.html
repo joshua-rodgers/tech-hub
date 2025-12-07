@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TechHub Electronics - Your Online Tech Store{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('techhub.static', filename='css/style.css') }}">
+    <script src="{{ url_for('techhub.static', filename='js/cart.js') }}"></script>
+</head>
+<body>
+    <div id="container">
+        <!-- Header -->
+        <div id="header">
+            <h1>🖥️ TechHub Electronics 🖥️</h1>
+            <div class="tagline">Your Premier Source for Computer Hardware and Electronics Since 1998!</div>
+        </div>
+
+        <!-- Navigation -->
+        <div id="navigation">
+            <a href="{{ url_for('techhub.index') }}">Home</a>
+            <span class="separator">|</span>
+            <a href="{{ url_for('techhub.products') }}">Products</a>
+            <span class="separator">|</span>
+            <a href="{{ url_for('techhub.cart') }}">Shopping Cart {% if cart_count %}({{ cart_count }}){% endif %}</a>
+            <span class="separator">|</span>
+            {% if session.get('customer_id') %}
+                <a href="{{ url_for('techhub.account') }}">My Account</a>
+                <span class="separator">|</span>
+                <a href="{{ url_for('techhub.order_history') }}">Order History</a>
+                <span class="separator">|</span>
+                <a href="{{ url_for('techhub.logout') }}">Logout ({{ session.get('username') }})</a>
+            {% else %}
+                <a href="{{ url_for('techhub.login') }}">Login</a>
+                <span class="separator">|</span>
+                <a href="{{ url_for('techhub.register') }}">Register</a>
+            {% endif %}
+            <span class="separator">|</span>
+            <a href="{{ url_for('techhub.admin_login') }}">Admin</a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" style="padding: 0 20px;">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main Content -->
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Footer -->
+        <div id="footer">
+            <div class="copyright">
+                &copy; 1998-2005 TechHub Electronics. All Rights Reserved.
+            </div>
+            <div>
+                <a href="#">Privacy Policy</a> |
+                <a href="#">Terms of Service</a> |
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="disclaimer">
+                Best viewed in Internet Explorer 6.0 at 1024x768 resolution
+            </div>
+            <div style="margin-top: 10px; font-size: 9px; color: #999;">
+                ⚠️ EDUCATIONAL CYBERSECURITY LAB - INTENTIONALLY VULNERABLE ⚠️
+            </div>
+        </div>
+    </div>
+</body>
+</html>

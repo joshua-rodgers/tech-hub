@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Register - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>📝 Create Your Account</h1>
+
+<p>Join TechHub Electronics today and enjoy exclusive member benefits!</p>
+
+<form method="POST" action="{{ url_for('techhub.register') }}" onsubmit="return validateForm('register-form')" id="register-form">
+    <fieldset>
+        <legend>Account Information</legend>
+
+        <label for="username">Username <span class="required">*</span></label>
+        <input type="text" name="username" id="username" required>
+
+        <label for="password">Password <span class="required">*</span></label>
+        <input type="password" name="password" id="password" required>
+
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" name="email" id="email" required>
+    </fieldset>
+
+    <fieldset>
+        <legend>Personal Information</legend>
+
+        <label for="full_name">Full Name</label>
+        <input type="text" name="full_name" id="full_name">
+
+        <label for="address">Street Address</label>
+        <input type="text" name="address" id="address">
+
+        <label for="city">City</label>
+        <input type="text" name="city" id="city">
+
+        <label for="state">State</label>
+        <input type="text" name="state" id="state" maxlength="2" style="width: 60px;">
+
+        <label for="zip_code">ZIP Code</label>
+        <input type="text" name="zip_code" id="zip_code" maxlength="10" style="width: 120px;">
+    </fieldset>
+
+    <fieldset>
+        <legend>Payment Information (Optional - For Faster Checkout!)</legend>
+
+        <p style="background-color: #FFE; padding: 8px; border: 1px solid #FF6600; font-size: 10px;">
+            💳 Save your payment information for convenient one-click checkout! Your data is stored securely in our database.
+        </p>
+
+        <label for="credit_card">Credit Card Number</label>
+        <input type="text" name="credit_card" id="credit_card" placeholder="1234-5678-9012-3456" maxlength="19" onkeyup="formatCreditCard(this)">
+
+        <label for="cvv">CVV</label>
+        <input type="text" name="cvv" id="cvv" maxlength="4" style="width: 80px;">
+
+        <label for="expiration">Expiration Date</label>
+        <input type="text" name="expiration" id="expiration" placeholder="MM/YY" maxlength="5" style="width: 100px;">
+    </fieldset>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <button type="submit" style="padding: 10px 30px; font-size: 12px;">
+            ✓ Create Account
+        </button>
+        <a href="{{ url_for('techhub.login') }}" class="button button-secondary" style="text-decoration: none; margin-left: 10px;">
+            Cancel
+        </a>
+    </div>
+</form>
+
+<hr>
+
+<div style="text-align: center; padding: 10px; background-color: #E8F4FF; border: 1px solid #0066CC;">
+    <p>Already have an account? <a href="{{ url_for('techhub.login') }}"><b>Login here</b></a></p>
+</div>
+{% endblock %}

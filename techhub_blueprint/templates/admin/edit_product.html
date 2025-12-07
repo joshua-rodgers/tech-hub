@@ -1,0 +1,52 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Edit Product - Admin{% endblock %}
+
+{% block content %}
+<h1>✏️ Edit Product</h1>
+
+<form method="POST" action="{{ url_for('techhub.admin_edit_product', product_id=product[0]) }}" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Product Information</legend>
+
+        <label for="name">Product Name <span class="required">*</span></label>
+        <input type="text" name="name" id="name" value="{{ product[1] }}" required>
+
+        <label for="description">Description <span class="required">*</span></label>
+        <textarea name="description" id="description" required>{{ product[2] }}</textarea>
+
+        <label for="price">Price <span class="required">*</span></label>
+        <input type="number" name="price" id="price" value="{{ product[3] }}" step="0.01" min="0" required style="width: 150px;">
+
+        <label for="category">Category <span class="required">*</span></label>
+        <select name="category" id="category" required>
+            <option value="Computers" {% if product[4] == 'Computers' %}selected{% endif %}>Computers</option>
+            <option value="Components" {% if product[4] == 'Components' %}selected{% endif %}>Components</option>
+            <option value="Storage" {% if product[4] == 'Storage' %}selected{% endif %}>Storage</option>
+            <option value="Monitors" {% if product[4] == 'Monitors' %}selected{% endif %}>Monitors</option>
+            <option value="Accessories" {% if product[4] == 'Accessories' %}selected{% endif %}>Accessories</option>
+        </select>
+
+        <label for="stock">Stock Quantity <span class="required">*</span></label>
+        <input type="number" name="stock" id="stock" value="{{ product[6] }}" min="0" required style="width: 150px;">
+
+        <label>Current Image:</label>
+        <img src="{{ url_for('techhub.static', filename='uploads/products/' + product[5]) }}"
+             alt="{{ product[1] }}"
+             style="max-width: 150px; margin-bottom: 10px; border: 2px solid #999;">
+
+        <label for="image">Change Image (optional)</label>
+        <input type="file" name="image" id="image" accept="image/*" onchange="previewImage(this)" style="border: none;">
+        <img id="image-preview" style="max-width: 200px; margin-top: 10px; display: none; border: 2px solid #999;">
+    </fieldset>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <button type="submit" style="padding: 10px 30px; font-size: 12px;">
+            ✓ Update Product
+        </button>
+        <a href="{{ url_for('techhub.admin_products') }}" class="button button-secondary" style="text-decoration: none; margin-left: 10px;">
+            Cancel
+        </a>
+    </div>
+</form>
+{% endblock %}

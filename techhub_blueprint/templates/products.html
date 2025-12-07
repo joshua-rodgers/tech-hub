@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Products - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>🛍️ Our Products</h1>
+
+<!-- Search and Filter Form -->
+<div class="search-form">
+    <form method="GET" action="{{ url_for('techhub.products') }}" id="search-form">
+        <label for="search"><b>Search Products:</b></label>
+        <input type="text" name="search" id="search" value="{{ current_search }}" placeholder="Enter search term...">
+
+        <label for="category" style="margin-left: 20px;"><b>Category:</b></label>
+        <select name="category" id="category" onchange="autoSubmitSearch()">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if cat == current_category %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="sort" style="margin-left: 20px;"><b>Sort By:</b></label>
+        <select name="sort" id="sort" onchange="autoSubmitSearch()">
+            <option value="">Default</option>
+            <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name: A-Z</option>
+        </select>
+
+        <button type="submit" style="margin-left: 10px;">🔍 Search</button>
+        <a href="{{ url_for('techhub.products') }}" class="button button-secondary" style="margin-left: 5px; text-decoration: none;">Clear</a>
+    </form>
+</div>
+
+{% if current_search or current_category %}
+    <p style="background-color: #FFE; padding: 8px; border: 1px solid #FF6600;">
+        <b>Showing results for:</b>
+        {% if current_search %}"{{ current_search }}"{% endif %}
+        {% if current_category %}Category: {{ current_category }}{% endif %}
+        ({{ products|length }} items found)
+    </p>
+{% endif %}
+
+<hr>
+
+{% if products %}
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}">
+                <img src="{{ url_for('techhub.static', filename='uploads/products/' + product[5]) }}" alt="{{ product[1] }}">
+            </a>
+            <h3>
+                <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}" style="text-decoration: none;">
+                    {{ product[1] }}
+                </a>
+            </h3>
+            <div class="price">${{ "%.2f"|format(product[3]) }}</div>
+            {% if product[6] > 0 %}
+                <div class="stock">✓ In Stock ({{ product[6] }} available)</div>
+            {% else %}
+                <div class="stock out-of-stock">✗ Out of Stock</div>
+            {% endif %}
+            <form action="{{ url_for('techhub.add_to_cart', product_id=product[0]) }}" method="POST" style="border: none; background: none; padding: 0; margin-top: 8px;">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" {% if product[6] == 0 %}disabled{% endif %}>🛒 Add to Cart</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div style="text-align: center; padding: 40px; background-color: #FFE; border: 2px solid #CC0000;">
+        <h2 style="color: #CC0000;">No Products Found</h2>
+        <p>Try adjusting your search criteria or browse all products.</p>
+        <a href="{{ url_for('techhub.products') }}" class="button" style="text-decoration: none; margin-top: 10px;">View All Products</a>
+    </div>
+{% endif %}
+
+<hr>
+
+<div style="background-color: #F9F9F9; padding: 10px; border: 1px solid #999; margin-top: 20px;">
+    <p style="font-size: 10px; color: #666; text-align: center;">
+        💡 <b>Tip:</b> Try searching for specific products or use the category filter to narrow your results!
+    </p>
+</div>
+{% endblock %}

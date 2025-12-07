@@ -1,0 +1,49 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Products - Admin{% endblock %}
+
+{% block content %}
+<h1>📦 Manage Products</h1>
+
+<div style="text-align: right; margin-bottom: 15px;">
+    <a href="{{ url_for('techhub.admin_add_product') }}" class="button" style="text-decoration: none;">
+        ➕ Add New Product
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product[0] }}</td>
+            <td><b>{{ product[1] }}</b></td>
+            <td>{{ product[4] }}</td>
+            <td>${{ "%.2f"|format(product[3]) }}</td>
+            <td>{{ product[6] }}</td>
+            <td>
+                <a href="{{ url_for('techhub.admin_edit_product', product_id=product[0]) }}"
+                   class="button button-secondary"
+                   style="text-decoration: none; padding: 4px 8px; font-size: 10px; margin-right: 5px;">
+                    ✏️ Edit
+                </a>
+                <a href="{{ url_for('techhub.admin_delete_product', product_id=product[0]) }}"
+                   onclick="return confirmDelete('product', '{{ product[1] }}')"
+                   style="color: #CC0000; font-weight: bold; font-size: 10px;">
+                    ✗ Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

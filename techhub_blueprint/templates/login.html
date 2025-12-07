@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Login - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>🔐 Customer Login</h1>
+
+<div style="max-width: 400px; margin: 20px auto;">
+    <form method="POST" action="{{ url_for('techhub.login') }}">
+        <fieldset>
+            <legend>Enter Your Credentials</legend>
+
+            <label for="username">Username <span class="required">*</span></label>
+            <input type="text" name="username" id="username" required autofocus>
+
+            <label for="password">Password <span class="required">*</span></label>
+            <input type="password" name="password" id="password" required>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <button type="submit" style="padding: 10px 30px; font-size: 12px;">
+                    🔓 Login
+                </button>
+            </div>
+        </fieldset>
+    </form>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="#" style="font-size: 10px;">Forgot your password?</a>
+    </div>
+
+    <hr>
+
+    <div style="text-align: center; padding: 15px; background-color: #FFF8DC; border: 2px solid #FF6600;">
+        <h3 style="margin-bottom: 10px;">New Customer?</h3>
+        <p style="margin-bottom: 10px;">Create an account to enjoy these benefits:</p>
+        <ul style="text-align: left; margin-left: 40px; line-height: 1.6;">
+            <li>Fast checkout</li>
+            <li>Save payment information</li>
+            <li>Track your orders</li>
+            <li>Exclusive member deals</li>
+        </ul>
+        <a href="{{ url_for('techhub.register') }}" class="button" style="text-decoration: none; margin-top: 10px;">
+            Register Now →
+        </a>
+    </div>
+</div>
+
+<div style="margin-top: 30px; padding: 10px; background-color: #FFE; border: 1px dashed #999; text-align: center;">
+    <p style="font-size: 10px; color: #666;">
+        🔒 Your security is important to us. All data is stored safely in our database.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Add Product - Admin{% endblock %}
+
+{% block content %}
+<h1>➕ Add New Product</h1>
+
+<form method="POST" action="{{ url_for('techhub.admin_add_product') }}" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Product Information</legend>
+
+        <label for="name">Product Name <span class="required">*</span></label>
+        <input type="text" name="name" id="name" required>
+
+        <label for="description">Description <span class="required">*</span></label>
+        <textarea name="description" id="description" required></textarea>
+
+        <label for="price">Price <span class="required">*</span></label>
+        <input type="number" name="price" id="price" step="0.01" min="0" required style="width: 150px;">
+
+        <label for="category">Category <span class="required">*</span></label>
+        <select name="category" id="category" required>
+            <option value="">Select Category</option>
+            <option value="Computers">Computers</option>
+            <option value="Components">Components</option>
+            <option value="Storage">Storage</option>
+            <option value="Monitors">Monitors</option>
+            <option value="Accessories">Accessories</option>
+        </select>
+
+        <label for="stock">Stock Quantity <span class="required">*</span></label>
+        <input type="number" name="stock" id="stock" min="0" required style="width: 150px;">
+
+        <label for="image">Product Image</label>
+        <input type="file" name="image" id="image" accept="image/*" onchange="previewImage(this)" style="border: none;">
+        <img id="image-preview" style="max-width: 200px; margin-top: 10px; display: none; border: 2px solid #999;">
+    </fieldset>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <button type="submit" style="padding: 10px 30px; font-size: 12px;">
+            ✓ Add Product
+        </button>
+        <a href="{{ url_for('techhub.admin_products') }}" class="button button-secondary" style="text-decoration: none; margin-left: 10px;">
+            Cancel
+        </a>
+    </div>
+</form>
+{% endblock %}
