@@ -47,34 +47,62 @@
     <div class="products-grid">
         {% for product in products %}
         <div class="product-card">
-            <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}">
-                <img src="{{ url_for('techhub.static', filename='uploads/products/' + (product[5] if product[5] and '.' in product[5]|string else 'default.jpg')) }}"
-                     alt="{{ product[1] }}"
-                     onerror="this.src='{{ url_for('techhub.static', filename='uploads/products/default.jpg') }}'">
-            </a>
-            <h3>
-                <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}" style="text-decoration: none;">
-                    {{ product[1] }}
+            {% if product[0] is number and product[0] > 0 %}
+                <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}">
+                    <img src="{{ url_for('techhub.static', filename='uploads/products/' + (product[5] if product[5] and '.' in product[5]|string else 'default.jpg')) }}"
+                         alt="{{ product[1] }}"
+                         onerror="this.src='{{ url_for('techhub.static', filename='uploads/products/default.jpg') }}'">
                 </a>
+            {% else %}
+                <img src="{{ url_for('techhub.static', filename='uploads/products/default.jpg') }}"
+                     alt="{{ product[1] }}"
+                     style="opacity: 0.5;">
+            {% endif %}
+
+            <h3 style="word-wrap: break-word;">
+                {% if product[0] is number and product[0] > 0 %}
+                    <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}" style="text-decoration: none;">
+                        {{ product[1] }}
+                    </a>
+                {% else %}
+                    {{ product[1] }}
+                {% endif %}
             </h3>
-            <div class="price">
+
+            <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word;">
+                <div><b>Field 2:</b> {{ product[2] if product[2] else 'N/A' }}</div>
+            </div>
+
+            <div class="price" style="word-wrap: break-word;">
                 {% if product[3] is number %}
                     ${{ "%.2f"|format(product[3]) }}
                 {% else %}
-                    {{ product[3] }}
+                    <b>Field 3:</b> {{ product[3] if product[3] else 'N/A' }}
                 {% endif %}
             </div>
+
+            <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word; color: #CC0000; font-weight: bold;">
+                <div><b>Field 4:</b> {{ product[4] if product[4] else 'N/A' }}</div>
+            </div>
+
+            <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word;">
+                <div><b>Field 5:</b> {{ product[5] if product[5] else 'N/A' }}</div>
+            </div>
+
             {% if product[6] is number and product[6] > 0 %}
                 <div class="stock">✓ In Stock ({{ product[6] }} available)</div>
             {% elif product[6] is number %}
                 <div class="stock out-of-stock">✗ Out of Stock</div>
             {% else %}
-                <div class="stock">{{ product[6] }}</div>
+                <div class="stock" style="word-wrap: break-word;"><b>Field 6:</b> {{ product[6] if product[6] else 'N/A' }}</div>
             {% endif %}
-            <form action="{{ url_for('techhub.add_to_cart', product_id=product[0]) }}" method="POST" style="border: none; background: none; padding: 0; margin-top: 8px;">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit" {% if product[6] == 0 %}disabled{% endif %}>🛒 Add to Cart</button>
-            </form>
+
+            {% if product[0] is number and product[0] > 0 and product[6] is number %}
+                <form action="{{ url_for('techhub.add_to_cart', product_id=product[0]) }}" method="POST" style="border: none; background: none; padding: 0; margin-top: 8px;">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" {% if product[6] is number and product[6] == 0 %}disabled{% endif %}>🛒 Add to Cart</button>
+                </form>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
