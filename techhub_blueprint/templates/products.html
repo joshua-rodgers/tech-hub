@@ -69,9 +69,12 @@
                 {% endif %}
             </h3>
 
-            <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word;">
-                <div><b>Field 2:</b> {{ product[2] if product[2] else 'N/A' }}</div>
-            </div>
+            {# Only show detailed field labels for injected data (when price is not a number) #}
+            {% if product[3] is not number %}
+                <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word;">
+                    <div><b>Field 2:</b> {{ product[2] if product[2] else 'N/A' }}</div>
+                </div>
+            {% endif %}
 
             <div class="price" style="word-wrap: break-word;">
                 {% if product[3] is number %}
@@ -81,13 +84,16 @@
                 {% endif %}
             </div>
 
-            <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word; color: #CC0000; font-weight: bold;">
-                <div><b>Field 4:</b> {{ product[4] if product[4] else 'N/A' }}</div>
-            </div>
+            {# Show additional fields for injected data only #}
+            {% if product[3] is not number %}
+                <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word; color: #CC0000; font-weight: bold;">
+                    <div><b>Field 4:</b> {{ product[4] if product[4] else 'N/A' }}</div>
+                </div>
 
-            <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word;">
-                <div><b>Field 5:</b> {{ product[5] if product[5] else 'N/A' }}</div>
-            </div>
+                <div style="font-size: 10px; margin: 5px 0; word-wrap: break-word;">
+                    <div><b>Field 5:</b> {{ product[5] if product[5] else 'N/A' }}</div>
+                </div>
+            {% endif %}
 
             {% if product[6] is number and product[6] > 0 %}
                 <div class="stock">✓ In Stock ({{ product[6] }} available)</div>
