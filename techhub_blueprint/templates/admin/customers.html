@@ -1,0 +1,62 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Customers - Admin{% endblock %}
+
+{% block content %}
+<h1>👥 Manage Customers</h1>
+
+<div style="text-align: right; margin-bottom: 15px;">
+    <a href="{{ url_for('techhub.admin_add_customer') }}" class="button" style="text-decoration: none; margin-right: 5px;">
+        ➕ Add New Customer
+    </a>
+    <a href="{{ url_for('techhub.admin_bulk_upload') }}" class="button button-secondary" style="text-decoration: none;">
+        📤 Bulk Upload CSV
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Credit Card</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer[0] }}</td>
+            <td><b>{{ customer[1] }}</b></td>
+            <td>{{ customer[3] }}</td>
+            <td>{{ customer[4] or 'N/A' }}</td>
+            <td>
+                {% if customer[9] %}
+                    <span style="color: #009900;">{{ customer[9] }}</span>
+                {% else %}
+                    <span style="color: #999;">No card on file</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('techhub.admin_delete_customer', customer_id=customer[0]) }}"
+                   onclick="return confirmDelete('customer', '{{ customer[1] }}')"
+                   style="color: #CC0000; font-weight: bold; font-size: 10px;">
+                    ✗ Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #FFE; border: 2px solid #CC0000;">
+    <h3 style="color: #CC0000;">⚠️ Security Notice</h3>
+    <p style="font-size: 11px;">
+        This table displays sensitive customer information including credit card numbers.
+        In a production environment, this data should be encrypted and access should be strictly controlled.
+        This is intentionally insecure for educational purposes.
+    </p>
+</div>
+{% endblock %}

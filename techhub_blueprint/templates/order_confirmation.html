@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmation - TechHub Electronics{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 30px; background: linear-gradient(to bottom, #DFD, #EFE); border: 3px solid #090;">
+    <h1 style="color: #060; border: none;">✓ Thank You for Your Order!</h1>
+    <p style="font-size: 14px; margin-top: 10px;">
+        Your order has been successfully placed and is being processed.
+    </p>
+</div>
+
+<hr>
+
+<div style="background-color: #FFF8DC; border: 2px solid #FF6600; padding: 20px; margin: 20px 0;">
+    <h2>Order Details</h2>
+    <p><b>Order Number:</b> #{{ order[0] }}</p>
+    <p><b>Order Date:</b> {{ order[4] }}</p>
+    <p><b>Status:</b> <span style="color: #FF6600; font-weight: bold;">{{ order[3]|upper }}</span></p>
+    <p><b>Expected Delivery:</b> 5-7 Business Days</p>
+</div>
+
+<h2>Items Ordered</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order_items %}
+        <tr>
+            <td>
+                <img src="{{ url_for('techhub.static', filename='uploads/products/' + item[6]) }}"
+                     alt="{{ item[5] }}"
+                     style="max-width: 50px; max-height: 50px; vertical-align: middle; margin-right: 10px;">
+                <b>{{ item[5] }}</b>
+            </td>
+            <td>{{ item[3] }}</td>
+            <td>${{ "%.2f"|format(item[4]) }}</td>
+            <td>${{ "%.2f"|format(item[3] * item[4]) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="cart-total">
+    <h2 style="display: inline; margin-right: 20px;">Order Total:</h2>
+    <span style="font-size: 18px; color: #CC0000;">${{ "%.2f"|format(order[2]) }}</span>
+</div>
+
+<hr>
+
+<div style="text-align: center; padding: 20px; background-color: #E8F4FF; border: 2px solid #0066CC;">
+    <h3>What's Next?</h3>
+    <p style="margin: 10px 0;">You will receive an email confirmation shortly.</p>
+    <p style="margin: 10px 0;">Track your order status in your account!</p>
+
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('techhub.order_history') }}" class="button" style="text-decoration: none; margin: 5px;">
+            📦 View Order History
+        </a>
+        <a href="{{ url_for('techhub.products') }}" class="button button-secondary" style="text-decoration: none; margin: 5px;">
+            🛍️ Continue Shopping
+        </a>
+    </div>
+</div>
+
+<div style="margin-top: 20px; text-align: center; padding: 15px; background-color: #FFF8DC; border: 1px dashed #FF6600;">
+    <p style="font-size: 11px;">
+        💡 <b>Tip:</b> Save this order number for your records: <b>#{{ order[0] }}</b>
+    </p>
+</div>
+{% endblock %}

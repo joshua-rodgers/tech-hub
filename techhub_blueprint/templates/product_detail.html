@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product[1] }} - TechHub Electronics{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('techhub.index') }}">Home</a> &raquo;
+    <a href="{{ url_for('techhub.products') }}">Products</a> &raquo;
+    <a href="{{ url_for('techhub.products', category=product[4]) }}">{{ product[4] }}</a> &raquo;
+    {{ product[1] }}
+</div>
+
+<div class="product-detail clearfix">
+    <img src="{{ url_for('techhub.static', filename='uploads/products/' + product[5]) }}" alt="{{ product[1] }}">
+
+    <h1 style="margin-top: 0;">{{ product[1] }}</h1>
+
+    <div class="price">${{ "%.2f"|format(product[3]) }}</div>
+
+    <p><b>Category:</b> {{ product[4] }}</p>
+
+    {% if product[6] > 0 %}
+        <p style="color: #009900; font-weight: bold;">✓ In Stock ({{ product[6] }} available)</p>
+    {% else %}
+        <p style="color: #CC0000; font-weight: bold;">✗ Out of Stock</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Product Description</h2>
+    <div class="description">
+        {{ product[2] }}
+    </div>
+
+    <hr>
+
+    {% if product[6] > 0 %}
+    <form action="{{ url_for('techhub.add_to_cart', product_id=product[0]) }}" method="POST">
+        <label for="quantity"><b>Quantity:</b></label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product[6] }}" style="width: 80px;">
+        <button type="submit" style="margin-left: 10px; padding: 8px 20px; font-size: 12px;">
+            🛒 Add to Cart
+        </button>
+    </form>
+    {% else %}
+    <p style="background-color: #FFE; padding: 10px; border: 2px solid #CC0000; text-align: center;">
+        <b>This item is currently out of stock. Please check back later!</b>
+    </p>
+    {% endif %}
+
+    <div style="clear: both;"></div>
+</div>
+
+<hr>
+
+<div style="text-align: center; padding: 10px;">
+    <a href="{{ url_for('techhub.products') }}" class="button button-secondary" style="text-decoration: none;">
+        ← Back to Products
+    </a>
+    <a href="{{ url_for('techhub.cart') }}" class="button" style="text-decoration: none; margin-left: 10px;">
+        View Cart →
+    </a>
+</div>
+{% endblock %}

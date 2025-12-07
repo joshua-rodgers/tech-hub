@@ -1,0 +1,70 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Admin Dashboard - TechHub Electronics{% endblock %}
+
+{% block content %}
+<h1>📊 Admin Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-box">
+        <div class="number">{{ products_count }}</div>
+        <div class="label">Total Products</div>
+    </div>
+    <div class="stat-box">
+        <div class="number">{{ customers_count }}</div>
+        <div class="label">Total Customers</div>
+    </div>
+    <div class="stat-box">
+        <div class="number">{{ orders_count }}</div>
+        <div class="label">Total Orders</div>
+    </div>
+</div>
+
+<hr>
+
+<h2>Recent Orders</h2>
+
+{% if recent_orders %}
+    <table>
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in recent_orders %}
+            <tr>
+                <td><b>#{{ order[0] }}</b></td>
+                <td>{{ order[5] }}</td>
+                <td>{{ order[4] }}</td>
+                <td>${{ "%.2f"|format(order[2]) }}</td>
+                <td><span style="color: #FF6600; font-weight: bold;">{{ order[3]|upper }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p style="text-align: center; padding: 20px; background-color: #FFE;">No orders yet.</p>
+{% endif %}
+
+<hr>
+
+<div style="text-align: center; padding: 20px; background-color: #FFF8DC; border: 2px solid #FF6600;">
+    <h3>Quick Actions</h3>
+    <div style="margin-top: 15px;">
+        <a href="{{ url_for('techhub.admin_add_product') }}" class="button" style="text-decoration: none; margin: 5px;">
+            ➕ Add New Product
+        </a>
+        <a href="{{ url_for('techhub.admin_add_customer') }}" class="button" style="text-decoration: none; margin: 5px;">
+            ➕ Add New Customer
+        </a>
+        <a href="{{ url_for('techhub.admin_bulk_upload') }}" class="button button-secondary" style="text-decoration: none; margin: 5px;">
+            📤 Bulk Upload Customers
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Bulk Upload Customers - Admin{% endblock %}
+
+{% block content %}
+<h1>📤 Bulk Customer Upload</h1>
+
+<div style="background-color: #E8F4FF; border: 2px solid #0066CC; padding: 15px; margin-bottom: 20px;">
+    <h3>CSV Format Instructions</h3>
+    <p>Upload a CSV file with customer data in the following format:</p>
+    <pre style="background-color: #FFF; padding: 10px; border: 1px solid #999; overflow-x: auto; font-size: 10px;">username,password,email,full_name,address,city,state,zip_code,credit_card,cvv,expiration</pre>
+
+    <p style="margin-top: 10px;"><b>Example:</b></p>
+    <pre style="background-color: #FFF; padding: 10px; border: 1px solid #999; overflow-x: auto; font-size: 10px;">john.doe,password123,jdoe@email.com,John Doe,123 Main St,Springfield,IL,62701,4532-1111-2222-3333,123,12/25
+jane.smith,pass456,jsmith@email.com,Jane Smith,456 Oak Ave,Chicago,IL,60601,4532-4444-5555-6666,456,03/26</pre>
+</div>
+
+<form method="POST" action="{{ url_for('techhub.admin_bulk_upload') }}" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Upload CSV File</legend>
+
+        <label for="csv_file">Select CSV File <span class="required">*</span></label>
+        <input type="file" name="csv_file" id="csv_file" accept=".csv" required style="border: none;">
+
+        <p style="background-color: #FFE; padding: 8px; border: 1px solid #FF6600; font-size: 10px; margin-top: 10px;">
+            ⚠️ <b>Warning:</b> All customer data will be stored in plain text. Duplicate usernames will be skipped.
+        </p>
+    </fieldset>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <button type="submit" style="padding: 10px 30px; font-size: 12px;">
+            📤 Upload CSV
+        </button>
+        <a href="{{ url_for('techhub.admin_customers') }}" class="button button-secondary" style="text-decoration: none; margin-left: 10px;">
+            Cancel
+        </a>
+    </div>
+</form>
+
+<hr>
+
+<div style="background-color: #FFF8DC; border: 2px solid #FF6600; padding: 15px;">
+    <h3>📝 Sample CSV Download</h3>
+    <p>Need a template? Create a file named <code>customers.csv</code> with the format shown above.</p>
+    <p style="margin-top: 10px; font-size: 10px; color: #666;">
+        <b>Tip:</b> You can create CSV files using Excel, Google Sheets, or any text editor.
+    </p>
+</div>
+{% endblock %}

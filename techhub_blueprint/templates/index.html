@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}TechHub Electronics - Welcome!{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 20px; background: linear-gradient(to bottom, #FFC, #FFE); border: 2px solid #FF6600;">
+    <h1 style="border: none;">🎉 Welcome to TechHub Electronics! 🎉</h1>
+    <p style="font-size: 12px; margin-top: 10px;">
+        Your one-stop shop for the latest computer hardware, electronics, and gaming gear!
+    </p>
+</div>
+
+<hr>
+
+<h2 style="text-align: center;">⭐ Featured Products ⭐</h2>
+
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}">
+            <img src="{{ url_for('techhub.static', filename='uploads/products/' + product[5]) }}" alt="{{ product[1] }}">
+        </a>
+        <h3>
+            <a href="{{ url_for('techhub.product_detail', product_id=product[0]) }}" style="text-decoration: none;">
+                {{ product[1] }}
+            </a>
+        </h3>
+        <div class="price">${{ "%.2f"|format(product[3]) }}</div>
+        {% if product[6] > 0 %}
+            <div class="stock">✓ In Stock</div>
+        {% else %}
+            <div class="stock out-of-stock">✗ Out of Stock</div>
+        {% endif %}
+        <form action="{{ url_for('techhub.add_to_cart', product_id=product[0]) }}" method="POST" style="border: none; background: none; padding: 0; margin-top: 8px;">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" {% if product[6] == 0 %}disabled{% endif %}>🛒 Add to Cart</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+<hr>
+
+<div style="text-align: center; padding: 15px; background-color: #E8F4FF; border: 2px solid #0066CC;">
+    <h2 style="margin-bottom: 10px;">🔍 Find What You Need!</h2>
+    <p style="margin-bottom: 10px;">Browse our complete catalog of products</p>
+    <a href="{{ url_for('techhub.products') }}" class="button" style="text-decoration: none; font-size: 12px;">
+        View All Products →
+    </a>
+</div>
+
+<hr>
+
+<div style="background-color: #FFF8DC; border: 2px solid #FF6600; padding: 15px; margin-top: 20px;">
+    <h3>📢 Special Offers!</h3>
+    <ul style="margin-left: 20px; line-height: 1.8;">
+        <li><b>FREE SHIPPING</b> on orders over $100!</li>
+        <li><b>10% OFF</b> your first order when you register!</li>
+        <li><b>SAME DAY SHIPPING</b> on in-stock items!</li>
+        <li><b>30-DAY RETURNS</b> - No questions asked!</li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin-top: 20px; padding: 10px;">
+    <img src="https://web.archive.org/web/19991128140404im_/http://www.animfactory.com/animations/alphabet/transparent/t/trans_t_rotating_big.gif"
+         alt="Under Construction"
+         style="border: 2px solid #FF6600; background: #000;"
+         onerror="this.style.display='none'">
+    <p style="font-size: 10px; color: #666; margin-top: 5px;">
+        Site counter: 000042847 visitors since 1998
+    </p>
+</div>
+{% endblock %}
